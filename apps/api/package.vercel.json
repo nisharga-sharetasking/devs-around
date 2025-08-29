@@ -14,7 +14,9 @@
     "helmet": "^8.0.0",
     "compression": "^1.7.5",
     "express-rate-limit": "^7.5.0",
-    "express-validator": "^7.2.1"
+    "express-validator": "^7.2.1",
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

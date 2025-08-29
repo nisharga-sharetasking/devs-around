@@ -35,11 +35,11 @@ export class UserController {
         return next(new AppError('User already exists', 400))
       }
       
-      const user = new User({ name, email, password, role })
+      const user = new User({ name, email, passwordHash: password, role })
       await user.save()
       
       const userResponse = user.toObject()
-      delete userResponse.password
+      delete (userResponse as any).passwordHash
       
       res.status(201).json(userResponse)
     } catch (error) {
