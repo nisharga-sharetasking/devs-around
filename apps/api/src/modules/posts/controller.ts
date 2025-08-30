@@ -33,11 +33,14 @@ export class PostController {
   })
 
   getPosts = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const page = req.query.page ? parseInt(req.query.page as string) : 1
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 10
+    
     const result = await postService.getPublicPosts({
       search: req.query.search as string,
       tag: req.query.tag as string,
-      page: parseInt(req.query.page as string) || 1,
-      limit: parseInt(req.query.limit as string) || 10
+      page: page > 0 ? page : 1,
+      limit: limit > 0 && limit <= 100 ? limit : 10
     })
 
     ResponseHandler.success(
@@ -47,7 +50,7 @@ export class PostController {
       200,
       {
         page: result.currentPage,
-        limit: result.posts.length,
+        limit: limit > 0 && limit <= 100 ? limit : 10,
         total: result.total,
         totalPages: result.totalPages
       }
@@ -56,6 +59,12 @@ export class PostController {
 
   getPostBySlug = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const post = await postService.getPostBySlug(req.params.slug)
+
+    ResponseHandler.success(res, 'Post fetched successfully', { post })
+  })
+
+  getPostById = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const post = await postService.getPostById(req.params.id)
 
     ResponseHandler.success(res, 'Post fetched successfully', { post })
   })

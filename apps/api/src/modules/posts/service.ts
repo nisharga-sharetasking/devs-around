@@ -103,11 +103,16 @@ export class PostService {
   async getPublicPosts(query: GetPostsQuery): Promise<PostsResponse> {
     const { search, tag, page = 1, limit = 10 } = query
     
-    // Build query
-    const filter: any = { publishedAt: { $ne: null, $lte: new Date() } }
+    // Build query - show all posts for now (in production, you may want to filter by publishedAt)
+    const filter: any = {}
     
     if (search) {
-      filter.$text = { $search: search }
+      // Use regex for search if text index is not available
+      filter.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { content: { $regex: search, $options: 'i' } },
+        { tags: { $regex: search, $options: 'i' } }
+      ]
     }
     
     if (tag) {
@@ -120,7 +125,7 @@ export class PostService {
     // Get paginated posts
     const posts = await Post.find(filter)
       .populate('authorId', 'name email')
-      .sort({ publishedAt: -1 })
+      .sort({ createdAt: -1 }) // Sort by creation date instead
       .skip((page - 1) * limit)
       .limit(limit)
 
@@ -134,8 +139,8 @@ export class PostService {
 
   async getPostBySlug(slug: string): Promise<IPost> {
     const post = await Post.findOne({ 
-      slug,
-      publishedAt: { $ne: null, $lte: new Date() }
+      slug
+      // Remove publishedAt filter to show all posts during development
     }).populate('authorId', 'name email')
 
     if (!post) {
@@ -165,27 +170,56 @@ export class PostService {
 
   async seedPosts(authorId: string): Promise<void> {
     try {
+      // Check if user already has posts
+      const existingCount = await Post.countDocuments({ authorId: new Types.ObjectId(authorId) })
+      if (existingCount > 0) {
+        throw new ConflictError('User already has posts. Delete existing posts before seeding.')
+      }
+
       // Fetch sample posts from JSONPlaceholder
       const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=10')
-      const samplePosts = await response.json()
+      if (!response.ok) {
+        throw new Error('Failed to fetch sample posts')
+      }
+      
+      const samplePosts = await response.json() as any[]
+      const createdPosts = []
 
-      for (const samplePost of samplePosts as any[]) {
+      for (let i = 0; i < samplePosts.length; i++) {
+        const samplePost = samplePosts[i]
+        
+        // Generate unique slug with timestamp
+        const baseSlug = samplePost.title
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .substring(0, 40)
+        
+        const uniqueSlug = `${baseSlug}-${Date.now()}-${i}`
+
         const post = new Post({
           title: samplePost.title,
-          content: samplePost.body,
-          slug: samplePost.title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 50),
-          excerpt: samplePost.body.substring(0, 200),
-          tags: ['sample', 'demo', 'blog'],
+          content: samplePost.body + '\n\nThis is a sample post generated for demonstration purposes. ' +
+                   'You can edit or delete this post as needed.',
+          slug: uniqueSlug,
+          excerpt: samplePost.body.substring(0, 200) + '...',
+          tags: ['sample', 'demo', 'blog', `category-${(i % 3) + 1}`],
           authorId: new Types.ObjectId(authorId),
-          publishedAt: new Date(),
-          coverImageUrl: `https://picsum.photos/800/400?random=${samplePost.id}`
+          publishedAt: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)), // Stagger publish dates
+          coverImageUrl: `https://picsum.photos/800/400?random=${Date.now() + i}`
         })
 
-        await post.save()
+        const savedPost = await post.save()
+        createdPosts.push(savedPost)
       }
+
+      console.log(`Successfully seeded ${createdPosts.length} posts for user ${authorId}`)
     } catch (error) {
       console.error('Error seeding posts:', error)
-      throw new BadRequestError('Failed to seed posts')
+      if (error instanceof ConflictError) {
+        throw error
+      }
+      throw new BadRequestError('Failed to seed posts. Please try again.')
     }
   }
 }

@@ -1,7 +1,9 @@
 # DevsAround Blog API Documentation
 
 ## 🚀 Live API URL
-**Base URL**: `https://api-elc708ank-kabirnishargagmailcoms-projects.vercel.app`
+**Base URL**: `https://api-8n8pbw3zu-kabirnishargagmailcoms-projects.vercel.app`
+**Last Deployed**: August 30, 2025
+**Note**: Deployment protected by Vercel authentication
 
 ## 📋 Overview
 A RESTful API for a blog platform built with Express.js, MongoDB, and TypeScript. Features user authentication, blog post management, and content search capabilities.
@@ -42,7 +44,10 @@ pnpm run test
 
 ### Deployment
 ```bash
-# Deploy to Vercel
+# Deploy to Vercel (Production)
+vercel --prod
+
+# Or use the deployment script
 bash vercel-deploy.sh
 ```
 
@@ -401,21 +406,21 @@ Tokens expire after 7 days by default.
 
 **Signup:**
 ```bash
-curl -X POST https://api-mu0hnpmdp-kabirnishargagmailcoms-projects.vercel.app/api/auth/signup \
+curl -X POST https://api-8n8pbw3zu-kabirnishargagmailcoms-projects.vercel.app/api/auth/signup \
   -H "Content-Type: application/json" \
   -d '{"name":"Test User","email":"test@example.com","password":"Test123!"}'
 ```
 
 **Login:**
 ```bash
-curl -X POST https://api-mu0hnpmdp-kabirnishargagmailcoms-projects.vercel.app/api/auth/login \
+curl -X POST https://api-8n8pbw3zu-kabirnishargagmailcoms-projects.vercel.app/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"Test123!"}'
 ```
 
 **Create Post:**
 ```bash
-curl -X POST https://api-mu0hnpmdp-kabirnishargagmailcoms-projects.vercel.app/api/posts \
+curl -X POST https://api-8n8pbw3zu-kabirnishargagmailcoms-projects.vercel.app/api/posts \
   -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -H "Content-Type: application/json" \
   -d '{"title":"My First Post","content":"This is my first blog post content!"}'
@@ -423,7 +428,7 @@ curl -X POST https://api-mu0hnpmdp-kabirnishargagmailcoms-projects.vercel.app/ap
 
 **Get Posts:**
 ```bash
-curl https://api-mu0hnpmdp-kabirnishargagmailcoms-projects.vercel.app/api/posts
+curl https://api-8n8pbw3zu-kabirnishargagmailcoms-projects.vercel.app/api/posts
 ```
 
 ### Using JavaScript/Fetch
@@ -431,7 +436,7 @@ curl https://api-mu0hnpmdp-kabirnishargagmailcoms-projects.vercel.app/api/posts
 ```javascript
 // Signup
 const signup = async () => {
-  const response = await fetch('https://api-mu0hnpmdp-kabirnishargagmailcoms-projects.vercel.app/api/auth/signup', {
+  const response = await fetch('https://api-8n8pbw3zu-kabirnishargagmailcoms-projects.vercel.app/api/auth/signup', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -447,7 +452,7 @@ const signup = async () => {
 
 // Create Post
 const createPost = async (token) => {
-  const response = await fetch('https://api-mu0hnpmdp-kabirnishargagmailcoms-projects.vercel.app/api/posts', {
+  const response = await fetch('https://api-8n8pbw3zu-kabirnishargagmailcoms-projects.vercel.app/api/posts', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -466,7 +471,7 @@ const createPost = async (token) => {
 
 // Get Posts
 const getPosts = async () => {
-  const response = await fetch('https://api-mu0hnpmdp-kabirnishargagmailcoms-projects.vercel.app/api/posts?page=1&limit=10');
+  const response = await fetch('https://api-8n8pbw3zu-kabirnishargagmailcoms-projects.vercel.app/api/posts?page=1&limit=10');
   const data = await response.json();
   console.log(data);
 };

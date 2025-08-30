@@ -5,7 +5,6 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["@devsaround/ui"],
   },
-  output: 'standalone',
   images: {
     domains: [],
   },
