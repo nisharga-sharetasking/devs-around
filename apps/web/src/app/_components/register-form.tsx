@@ -22,7 +22,7 @@ import { Loader } from 'lucide-react'
 import { setAccessToken, setRefreshToken } from '@/auth/cookies'
 import { useRouter } from 'next/navigation'
 
-const LoginForm = () => {
+const RegisterForm = () => {
   // === router ===
   const router = useRouter()
 
@@ -67,7 +67,7 @@ const LoginForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleLogin)} className="w-full grid gap-6">
-        <h3 className="text-2xl font-medium">Login</h3>
+        <h3 className="text-2xl font-medium">Register</h3>
 
         <FormField
           control={form.control}
@@ -109,4 +109,4 @@ const LoginForm = () => {
   )
 }
 
-export default LoginForm
+export default RegisterForm
