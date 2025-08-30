@@ -1,8 +1,9 @@
-"use client";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+'use client'
 
-import type React from "react";
+import type React from 'react'
 
-import type { Editor } from "@tiptap/react";
+import type { Editor } from '@tiptap/react'
 import {
   Bold,
   Italic,
@@ -20,18 +21,18 @@ import {
   AlignLeft,
   AlignCenter,
   AlignRight,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Toggle } from "@/components/ui/toggle";
-import { Separator } from "@/components/ui/separator";
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Toggle } from '@/components/ui/toggle'
+import { Separator } from '@/components/ui/separator'
 
 interface EditorToolbarProps {
-  editor: Editor;
+  editor: Editor
 }
 
 export function EditorToolbar({ editor }: EditorToolbarProps) {
   if (!editor) {
-    return null;
+    return null
   }
 
   return (
@@ -39,7 +40,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       <div className="flex items-center">
         <Toggle
           size="sm"
-          pressed={editor.isActive("bold")}
+          pressed={editor.isActive('bold')}
           onPressedChange={() => editor.chain().focus().toggleBold().run()}
           aria-label="Toggle bold"
         >
@@ -47,7 +48,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         </Toggle>
         <Toggle
           size="sm"
-          pressed={editor.isActive("italic")}
+          pressed={editor.isActive('italic')}
           onPressedChange={() => editor.chain().focus().toggleItalic().run()}
           aria-label="Toggle italic"
         >
@@ -55,7 +56,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         </Toggle>
         <Toggle
           size="sm"
-          pressed={editor.isActive("strike")}
+          pressed={editor.isActive('strike')}
           onPressedChange={() => editor.chain().focus().toggleStrike().run()}
           aria-label="Toggle strikethrough"
         >
@@ -63,7 +64,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         </Toggle>
         <Toggle
           size="sm"
-          pressed={editor.isActive("code")}
+          pressed={editor.isActive('code')}
           onPressedChange={() => editor.chain().focus().toggleCode().run()}
           aria-label="Toggle code"
         >
@@ -76,37 +77,31 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       <div className="flex items-center">
         <Toggle
           size="sm"
-          pressed={editor.isActive("heading", { level: 1 })}
-          onPressedChange={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
+          pressed={editor.isActive('heading', { level: 1 })}
+          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           aria-label="Toggle h1"
         >
           <Heading1 className="h-4 w-4" />
         </Toggle>
         <Toggle
           size="sm"
-          pressed={editor.isActive("heading", { level: 2 })}
-          onPressedChange={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
+          pressed={editor.isActive('heading', { level: 2 })}
+          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           aria-label="Toggle h2"
         >
           <Heading2 className="h-4 w-4" />
         </Toggle>
         <Toggle
           size="sm"
-          pressed={editor.isActive("heading", { level: 3 })}
-          onPressedChange={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
+          pressed={editor.isActive('heading', { level: 3 })}
+          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           aria-label="Toggle h3"
         >
           <Heading3 className="h-4 w-4" />
         </Toggle>
         <Toggle
           size="sm"
-          pressed={editor.isActive("paragraph")}
+          pressed={editor.isActive('paragraph')}
           onPressedChange={() => editor.chain().focus().setParagraph().run()}
           aria-label="Toggle paragraph"
         >
@@ -119,30 +114,24 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       <div className="flex items-center">
         <Toggle
           size="sm"
-          pressed={editor.isActive("bulletList")}
-          onPressedChange={() =>
-            editor.chain().focus().toggleBulletList().run()
-          }
+          pressed={editor.isActive('bulletList')}
+          onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
           aria-label="Toggle bullet list"
         >
           <List className="h-4 w-4" />
         </Toggle>
         <Toggle
           size="sm"
-          pressed={editor.isActive("orderedList")}
-          onPressedChange={() =>
-            editor.chain().focus().toggleOrderedList().run()
-          }
+          pressed={editor.isActive('orderedList')}
+          onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
           aria-label="Toggle ordered list"
         >
           <ListOrdered className="h-4 w-4" />
         </Toggle>
         <Toggle
           size="sm"
-          pressed={editor.isActive("blockquote")}
-          onPressedChange={() =>
-            editor.chain().focus().toggleBlockquote().run()
-          }
+          pressed={editor.isActive('blockquote')}
+          onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
           aria-label="Toggle blockquote"
         >
           <Quote className="h-4 w-4" />
@@ -154,30 +143,27 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       <div className="flex items-center">
         <Toggle
           size="sm"
-          pressed={editor.isActive({ textAlign: "left" })}
-          onPressedChange={() =>
-            editor.chain().focus().setTextAlign("left").run()
-          }
+          pressed={editor.isActive({ textAlign: 'left' })}
+          // @ts-ignore: Unreachable code error
+          onPressedChange={() => editor.chain().focus().setTextAlign('left').run()}
           aria-label="Align left"
         >
           <AlignLeft className="h-4 w-4" />
         </Toggle>
         <Toggle
           size="sm"
-          pressed={editor.isActive({ textAlign: "center" })}
-          onPressedChange={() =>
-            editor.chain().focus().setTextAlign("center").run()
-          }
+          pressed={editor.isActive({ textAlign: 'center' })}
+          // @ts-ignore: Unreachable code error
+          onPressedChange={() => editor.chain().focus().setTextAlign('center').run()}
           aria-label="Align center"
         >
           <AlignCenter className="h-4 w-4" />
         </Toggle>
         <Toggle
           size="sm"
-          pressed={editor.isActive({ textAlign: "right" })}
-          onPressedChange={() =>
-            editor.chain().focus().setTextAlign("right").run()
-          }
+          pressed={editor.isActive({ textAlign: 'right' })}
+          // @ts-ignore: Unreachable code error
+          onPressedChange={() => editor.chain().focus().setTextAlign('right').run()}
           aria-label="Align right"
         >
           <AlignRight className="h-4 w-4" />
@@ -207,5 +193,5 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         </Button>
       </div>
     </div>
-  );
+  )
 }

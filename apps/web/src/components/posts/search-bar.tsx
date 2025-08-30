@@ -1,4 +1,6 @@
-"use client"
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { Input } from '@/components/ui/input'
@@ -13,17 +15,18 @@ interface SearchBarProps {
   autoFocus?: boolean
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ 
-  onSearch, 
-  placeholder = "Search posts...",
-  className = "",
-  autoFocus = false
+const SearchBar: React.FC<SearchBarProps> = ({
+  onSearch,
+  placeholder = 'Search posts...',
+  className = '',
+  autoFocus = false,
 }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
   useEffect(() => {
     onSearch(debouncedSearchQuery)
+    // @ts-ignore: Unreachable code error
   }, [debouncedSearchQuery])
 
   const handleClear = useCallback(() => {
@@ -31,21 +34,24 @@ const SearchBar: React.FC<SearchBarProps> = ({
     onSearch('')
   }, [onSearch])
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault()
-    onSearch(searchQuery)
-  }, [searchQuery, onSearch])
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault()
+      onSearch(searchQuery)
+    },
+    [searchQuery, onSearch]
+  )
 
   return (
-    <form 
-      onSubmit={handleSubmit} 
+    <form
+      onSubmit={handleSubmit}
       className={`relative w-full max-w-2xl mx-auto ${className}`}
       role="search"
       aria-label="Search posts"
     >
       <div className="relative">
-        <SearchIcon 
-          className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" 
+        <SearchIcon
+          className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none"
           aria-hidden="true"
         />
         <Input

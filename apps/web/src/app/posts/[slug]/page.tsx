@@ -47,6 +47,7 @@ const PostDetailsPage = () => {
   }
 
   const postDate = post.publishedAt || post.createdAt
+  console.log('🚀 ~ postDate:', postDate)
   const formattedDate = formatDistanceToNow(new Date(postDate), { addSuffix: true })
   const readingTime = Math.ceil(post.content.split(' ').length / 200)
 

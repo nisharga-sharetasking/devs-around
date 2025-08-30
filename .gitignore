@@ -42,3 +42,4 @@ pnpm-debug.log*
 *.tsbuildinfo
 .env.example
 .env.production
+.vercel
