@@ -1,63 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { SquarePen, Trash } from "lucide-react";
-import React, { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import Image from "next/image";
-import Link from "next/link";
-import { IDigitalProductData } from "@/types/digital-product";
-import { useDeleteDigitalProductMutation } from "@/redux/api-queries/digital-product";
-import { toast } from "sonner";
-import { ConfirmActionDialog } from "@/components/shared/confirm-action-dialog";
+'use client'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { SquarePen, Trash } from 'lucide-react'
+import React, { useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { toast } from 'sonner'
+import { ConfirmActionDialog } from '@/components/shared/confirm-action-dialog'
+import { useDeletePostMutation } from '@/redux/api-queries/posts'
 
-const ProductActions = ({ product }: { product: IDigitalProductData }) => {
+const ProductActions = ({ product }: { product: any }) => {
   // delete product dialog state
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
   // === delete product api mutation hook ===
-  const [deleteProduct, { isLoading }] = useDeleteDigitalProductMutation();
+  const [deleteProduct, { isLoading }] = useDeletePostMutation()
 
   // === handle delete product ===
   const handleDeleteProduct = async () => {
     try {
-      const res: any = await deleteProduct({ productId: product?._id });
+      const res: any = await deleteProduct({ postId: product?._id })
       if (res?.data?.success) {
-        setOpenDeleteDialog(false);
-        toast.success("Product deleted successfully!");
+        setOpenDeleteDialog(false)
+        toast.success('Product deleted successfully!')
       } else if (res?.error?.data?.message) {
-        toast.error(res?.error?.data?.message || "Failed to delete product!");
+        toast.error(res?.error?.data?.message || 'Failed to delete product!')
       }
     } catch (error) {
-      console.error("DELETE PRODUCT ERROR: ", error);
-      toast.error("Somthing went wrong! Please try again.");
+      console.error('DELETE PRODUCT ERROR: ', error)
+      toast.error('Somthing went wrong! Please try again.')
     }
-  };
+  }
 
   return (
     <>
       <div className="flex items-center justify-center gap-2">
-        {/* view product */}
-        <Dialog>
-          <DialogTrigger className="border border-sm p-2 rounded-sm cursor-pointer !text-xs text-[#09090b] font-medium">
-            View
-          </DialogTrigger>
-          <DialogContent className="!max-w-[50%]">
-            <DialogHeader>
-              <DialogTitle>Product Details</DialogTitle>
-              <ProductDetails product={product} />
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
         {/* view product end */}
-        <Link href={`/dashboard/update-digital-product/${product?._id}`}>
+        <Link href={`/dashboard/update-post/${product?._id}`}>
           <Button variant="outline" size="icon">
             <SquarePen />
           </Button>
@@ -82,23 +62,19 @@ const ProductActions = ({ product }: { product: IDigitalProductData }) => {
         isLoading={isLoading}
       />
     </>
-  );
-};
+  )
+}
 
-export default ProductActions;
+export default ProductActions
 
 export const ProductDetails = ({ product }: { product?: any }) => {
-  const [selectedImage, setSelectedImage] = useState(product?.thumbnail);
-  const allImages = [product?.thumbnail, ...product?.slider_images];
+  const [selectedImage, setSelectedImage] = useState(product?.thumbnail)
+  const allImages = [product?.thumbnail, ...product?.slider_images]
 
   const discountPercentage =
     product?.regular_price > 0
-      ? Math.round(
-          ((product?.regular_price - product?.sale_price) /
-            product?.regular_price) *
-            100
-        )
-      : 0;
+      ? Math.round(((product?.regular_price - product?.sale_price) / product?.regular_price) * 100)
+      : 0
 
   return (
     <div className="max-h-[70vh] overflow-y-auto space-y-4 pr-2 text-black">
@@ -106,7 +82,7 @@ export const ProductDetails = ({ product }: { product?: any }) => {
       <div className="flex justify-center">
         <div className="w-48 h-48 relative rounded-lg border overflow-hidden">
           <Image
-            src={selectedImage || "/placeholder.svg"}
+            src={selectedImage || '/placeholder.svg'}
             alt={product.name}
             fill
             className="object-cover"
@@ -122,11 +98,11 @@ export const ProductDetails = ({ product }: { product?: any }) => {
               key={index}
               onClick={() => setSelectedImage(image)}
               className={`w-12 h-12 rounded border-2 overflow-hidden ${
-                selectedImage === image ? "border-primary" : "border-gray-200"
+                selectedImage === image ? 'border-primary' : 'border-gray-200'
               }`}
             >
               <Image
-                src={image || "/placeholder.svg"}
+                src={image || '/placeholder.svg'}
                 alt={`${product?.name} ${index + 1}`}
                 width={48}
                 height={48}
@@ -166,7 +142,7 @@ export const ProductDetails = ({ product }: { product?: any }) => {
           <div className="flex justify-between">
             <span className="text-muted-foreground">Slug:</span>
             <span>{product?.slug}</span>
-          </div>{" "}
+          </div>{' '}
           <div className="flex justify-between">
             <span className="text-muted-foreground">Total Sold:</span>
             <span>{product?.total_sold}</span>
@@ -177,9 +153,7 @@ export const ProductDetails = ({ product }: { product?: any }) => {
           </div>
           {product?.file_links.length > 0 && (
             <div>
-              <span className="text-muted-foreground text-sm">
-                Download Links:
-              </span>
+              <span className="text-muted-foreground text-sm">Download Links:</span>
               <div className="flex flex-wrap gap-1 mt-1">
                 {product?.file_links.map((tag: string, index: string) => (
                   <Badge key={index} variant="outline" className="text-xs">
@@ -203,8 +177,8 @@ export const ProductDetails = ({ product }: { product?: any }) => {
             <span
               className={
                 product.regular_price !== product.sale_price
-                  ? "line-through text-muted-foreground"
-                  : ""
+                  ? 'line-through text-muted-foreground'
+                  : ''
               }
             >
               ${product.regular_price}
@@ -212,9 +186,7 @@ export const ProductDetails = ({ product }: { product?: any }) => {
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Sale Price:</span>
-            <span className="font-medium text-primary">
-              ${product.sale_price}
-            </span>
+            <span className="font-medium text-primary">${product.sale_price}</span>
           </div>
           {discountPercentage > 0 && (
             <div className="flex justify-between">
@@ -239,12 +211,8 @@ export const ProductDetails = ({ product }: { product?: any }) => {
                   <span className="text-muted-foreground text-sm">Offers:</span>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {product?.offer_tags.map((tag: string, index: string) => (
-                      <Badge
-                        key={index}
-                        variant="destructive"
-                        className="text-xs"
-                      >
-                        {tag.replace("_", " ")}
+                      <Badge key={index} variant="destructive" className="text-xs">
+                        {tag.replace('_', ' ')}
                       </Badge>
                     ))}
                   </div>
@@ -252,9 +220,7 @@ export const ProductDetails = ({ product }: { product?: any }) => {
               )}
               {product?.search_tags.length > 0 && (
                 <div>
-                  <span className="text-muted-foreground text-sm">
-                    Search Tags:
-                  </span>
+                  <span className="text-muted-foreground text-sm">Search Tags:</span>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {product?.search_tags.map((tag: string, index: string) => (
                       <Badge key={index} variant="outline" className="text-xs">
@@ -295,21 +261,17 @@ export const ProductDetails = ({ product }: { product?: any }) => {
                     </div>
                   )}
                   <div className="space-y-1">
-                    {Object.entries(variant.attribute_values).map(
-                      ([key, value]) => (
-                        <div key={key} className="flex justify-between text-sm">
-                          <span className="text-muted-foreground capitalize">
-                            {key}:
-                          </span>
-                          <span>{value as string}</span>
-                        </div>
-                      )
-                    )}
+                    {Object.entries(variant.attribute_values).map(([key, value]) => (
+                      <div key={key} className="flex justify-between text-sm">
+                        <span className="text-muted-foreground capitalize">{key}:</span>
+                        <span>{value as string}</span>
+                      </div>
+                    ))}
                   </div>
                   {variant.image && (
                     <div className="flex justify-center mt-2">
                       <Image
-                        src={variant.image || "/placeholder.svg"}
+                        src={variant.image || '/placeholder.svg'}
                         alt={variant.sku}
                         width={60}
                         height={60}
@@ -329,13 +291,11 @@ export const ProductDetails = ({ product }: { product?: any }) => {
       <div className="space-y-1 text-sm">
         <div className="flex justify-between">
           <span className="text-muted-foreground">Published:</span>
-          <span
-            className={product.is_published ? "text-green-600" : "text-red-600"}
-          >
-            {product.is_published ? "Yes" : "No"}
+          <span className={product.is_published ? 'text-green-600' : 'text-red-600'}>
+            {product.is_published ? 'Yes' : 'No'}
           </span>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

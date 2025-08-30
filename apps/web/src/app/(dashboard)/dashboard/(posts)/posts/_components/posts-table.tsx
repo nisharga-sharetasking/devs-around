@@ -1,5 +1,4 @@
-"use client";
-
+'use client'
 import {
   Table,
   TableBody,
@@ -7,39 +6,45 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-import { Loader } from "lucide-react";
-import Image from "next/image";
-import React from "react";
-import ProductActions from "./product-actions";
-import { getActualIndex } from "@/utils/formatDate";
-import { IDigitalProductData } from "@/types/digital-product";
+} from '@/components/ui/table'
+import { cn } from '@/lib/utils'
+import { Loader } from 'lucide-react'
+import Image from 'next/image'
+import React from 'react'
+import ProductActions from './product-actions'
+import { getActualIndex } from '@/utils/formatDate'
+
+export interface IAuthor {
+  _id: string
+  name: string
+  email: string
+}
+
+export interface IPost {
+  _id: string
+  title: string
+  slug: string
+  excerpt: string
+  content: string
+  coverImageUrl: string
+  tags: string[]
+  authorId: IAuthor // populated author object
+  createdAt: string // ISO date string
+  updatedAt: string // ISO date string
+  publishedAt: string | null
+  __v: number
+}
 
 type ProductsTableProps = {
-  products: IDigitalProductData[];
-  isLoading: boolean;
-  isFetching: boolean;
-  page: number;
-};
+  products: IPost[]
+  isLoading: boolean
+  isFetching: boolean
+  page: number
+}
 
-const PRODUCTS_TABLE_HEADERS = [
-  "SL No.",
-  "Thumbnail",
-  "Name",
-  "SKU",
-  "Total Sold",
-  "Views",
-  "Is Published",
-  "Actions",
-];
+const PRODUCTS_TABLE_HEADERS = ['SL No.', 'Thumbnail', 'Post Title', 'Actions']
 
-export function ProductsTable({
-  products,
-  isLoading,
-  isFetching,
-  page,
-}: ProductsTableProps) {
+export function PostsTable({ products, isLoading, isFetching, page }: ProductsTableProps) {
   return (
     <div className="bg-background p-2 rounded-lg shadow-md">
       <Table>
@@ -49,10 +54,9 @@ export function ProductsTable({
             {PRODUCTS_TABLE_HEADERS.map((header, index) => (
               <TableHead
                 key={header}
-                className={cn("bg-primary/10 px-8", {
-                  "text-center rounded-tr-md":
-                    index === PRODUCTS_TABLE_HEADERS.length - 1,
-                  "rounded-tl-md": index === 0,
+                className={cn('bg-primary/10 px-8', {
+                  'text-center rounded-tr-md': index === PRODUCTS_TABLE_HEADERS.length - 1,
+                  'rounded-tl-md': index === 0,
                 })}
               >
                 {header}
@@ -66,13 +70,11 @@ export function ProductsTable({
           <TableBody>
             {products.map((product, index) => (
               <TableRow key={index}>
-                <TableCell className="px-8">
-                  {getActualIndex(index, page, 10)}
-                </TableCell>
+                <TableCell className="px-8">{getActualIndex(index, page, 10)}</TableCell>
                 <TableCell className="px-8">
                   <Image
-                    src={product?.thumbnail || "/no_image.png"}
-                    alt={product?.name}
+                    src={product?.coverImageUrl || '/no_image.png'}
+                    alt={product?.title}
                     height={32}
                     width={32}
                     className="rounded-md size-16"
@@ -80,14 +82,9 @@ export function ProductsTable({
                   />
                 </TableCell>
                 <TableCell className="px-8 w-[500px] break-words whitespace-normal">
-                  {product?.name}
+                  {product?.title}
                 </TableCell>
-                <TableCell className="px-8">{product?.sku}</TableCell>
-                <TableCell className="px-8">{product?.total_sold}</TableCell>
-                <TableCell className="px-8">{product?.views}</TableCell>
-                <TableCell className="px-8">
-                  {product?.is_published ? "yes" : "no"}
-                </TableCell>
+
                 <TableCell className="px-8 text-center">
                   <ProductActions product={product} />
                 </TableCell>
@@ -109,5 +106,5 @@ export function ProductsTable({
         <div className="text-center py-4">No data found!</div>
       )}
     </div>
-  );
+  )
 }

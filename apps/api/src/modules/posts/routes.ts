@@ -18,7 +18,7 @@ const postController = new PostController()
 // Public routes
 router.get('/', validateQuery(getPostsQuerySchema), postController.getPosts)
 router.get('/slug/:slug', validateParams(getPostBySlugSchema), postController.getPostBySlug)
-router.get('/id/:id', postController.getPostById)
+router.get('/:id', postController.getPostById)
 
 // Protected routes
 router.post('/', authenticate, validateBody(createPostSchema), postController.createPost)

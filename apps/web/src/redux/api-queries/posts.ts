@@ -46,6 +46,15 @@ const postApi = apiSlice.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["POSTS"],
+    }), 
+    
+    // === Get current user's posts ===
+    getPost: builder.query({
+      query: () => ({
+        url: `/posts/:id`,
+        method: "GET",
+      }),
+      providesTags: ["POSTS"],
     }),
 
     // === Update post by ID ===
@@ -76,4 +85,5 @@ export const {
   useGetMyPostsQuery,
   useUpdatePostMutation,
   useDeletePostMutation,
+  useGetPostQuery
 } = postApi;

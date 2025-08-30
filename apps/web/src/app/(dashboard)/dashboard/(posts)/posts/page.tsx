@@ -1,87 +1,35 @@
-"use client";
+'use client'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import GlobalLoader from '@/components/shared/global-loader'
+import { PostsTable } from './_components/posts-table'
+import { useGetMyPostsQuery } from '@/redux/api-queries/posts'
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { ProductsTable } from "./_components/products-table";
-import Pagination from "@/components/shared/pagination";
-import GlobalLoader from "@/components/shared/global-loader";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { useGetAllDigitalProductsQuery } from "@/redux/api-queries/digital-product";
+const PostPage = () => {
+  // === fetch posts ===
+  const { data, isLoading, isFetching } = useGetMyPostsQuery({})
+  const posts = data?.data?.posts
+  console.log('🚀 ~ PostPage ~ posts:', posts)
 
-const ProductsPage = () => {
-  const [searchInput, setSearchInput] = useState("");
-  // === get all products ===
-  const [filters, setFilters] = useState({
-    search_query: searchInput,
-    page: 1,
-    limit: 10,
-  });
-  useEffect(() => {
-    setFilters((prev) => ({
-      ...prev,
-      search_query: searchInput,
-      page: 1, // Optional: reset to page 1 when searching
-    }));
-  }, [searchInput]);
-
-  // === get all products ===
-  const { data, isLoading, isFetching } =
-    useGetAllDigitalProductsQuery(filters);
-  const products = data?.data?.data;
-
-  if (isLoading) return <GlobalLoader />;
-
-  const handlePageChange = (newPage: number) => {
-    setFilters((prev) => ({ ...prev, page: newPage }));
-  };
+  if (isLoading) return <GlobalLoader />
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-2">
-        <h1 className="font-medium text-2xl">
-          All Digital Products ({data?.data?.meta?.total})
-        </h1>
+        <h1 className="font-medium text-2xl">All Posts ({posts?.length})</h1>
 
         <div className="flex gap-2">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-            <Input
-              placeholder="Search Via Product Name..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className="pl-10 w-64"
-            />
-          </div>
+          {/* add new */}
           <Button asChild className="ms-auto">
-            <Link href="/dashboard/add-new-digital-product">
-              Add new Product
-            </Link>
+            <Link href="/dashboard/add-new-post">Add New Post</Link>
           </Button>
         </div>
       </div>
+
       {/* table */}
-      <ProductsTable
-        products={products}
-        isLoading={isLoading}
-        isFetching={isFetching}
-        page={data?.data?.meta.page}
-      />
-
-      {/* pagination */}
-      <div className="flex items-center justify-end pb-4">
-        {products && (
-          <Pagination
-            page={data?.data.meta.page}
-            limit={data?.data.meta.limit}
-            total={data?.data.meta?.total}
-            onPageChange={handlePageChange}
-          />
-        )}
-      </div>
+      <PostsTable products={posts} isLoading={isLoading} isFetching={isFetching} page={1} />
     </div>
-  );
-};
+  )
+}
 
-export default ProductsPage;
+export default PostPage
