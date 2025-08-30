@@ -19,7 +19,7 @@ import { LoginSchema } from '@/schema/login'
 import { useLoginMutation } from '@/redux/api-queries/auth-api'
 import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
-import { setAccessToken, setRefreshToken } from '@/auth/cookies'
+import { setAccessToken } from '@/auth/cookies'
 import { useRouter } from 'next/navigation'
 
 const LoginForm = () => {
@@ -28,7 +28,7 @@ const LoginForm = () => {
 
   // === form inital data ===
   const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(LoginSchema as any),
     defaultValues: {
       email: '',
       password: '',
@@ -44,9 +44,8 @@ const LoginForm = () => {
         payload: values,
       })
 
-      if (response?.data?.success) {
-        setAccessToken(response?.data?.data?.access_token)
-        setRefreshToken(response?.data?.data?.refresh_token)
+      if (response?.data?.status === 'success') {
+        setAccessToken(response?.data?.data?.token)
 
         // remove registerPayload from localStorage
         localStorage.removeItem('registerPayload')

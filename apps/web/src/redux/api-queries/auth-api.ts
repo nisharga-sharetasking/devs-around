@@ -5,7 +5,7 @@ const authApi = apiSlice.injectEndpoints({
     // === register ===
     register: builder.mutation({
       query: ({ payload }) => ({
-        url: `/user/register`,
+        url: `/auth/signup`,
         method: "POST",
         body: payload,
       }),
@@ -13,7 +13,7 @@ const authApi = apiSlice.injectEndpoints({
     // === login ===
     login: builder.mutation({
       query: ({ payload }) => ({
-        url: `/user/login`,
+        url: `/auth/login`,
         method: "POST",
         body: payload,
       }),
@@ -22,7 +22,7 @@ const authApi = apiSlice.injectEndpoints({
     // === get client profile by token ===
     getCurrentProfile: builder.query({
       query: () => ({
-        url: `/user`,
+        url: `/auth/me`,
         method: "GET",
       }),
       providesTags: ["CLIENT_PROFILE"],

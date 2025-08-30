@@ -12,16 +12,20 @@ export const RegisterSchema = z.object({
     .email({
       message: "Invalid email",
     }),
-  password: z.string().min(8, "Password should be at least 8 characters"),
-  phone_number: z
+   password: z
     .string()
-    .min(11, "Phone number should be 11 digits")
-    .max(11, "Phone number should be 11 digits"),
-  whatsapp_number: z
-    .string()
-    .min(11, "WhatsApp number should be 11 digits")
-    .max(11, "WhatsApp number should be 11 digits"),
-  business_category: z.string().min(1, {
-    message: "Business category is required",
-  }),
+    .min(8, { message: "Password should be at least 8 characters" })
+    .refine((val) => /[A-Z]/.test(val), {
+      message: "Password must contain at least one uppercase letter",
+    })
+    .refine((val) => /[a-z]/.test(val), {
+      message: "Password must contain at least one lowercase letter",
+    })
+    .refine((val) => /\d/.test(val), {
+      message: "Password must contain at least one number",
+    })
+    .refine((val) => /[\W_]/.test(val), {
+      message: "Password must contain at least one special character",
+    }),
+   
 });

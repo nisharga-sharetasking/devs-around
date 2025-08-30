@@ -15,38 +15,38 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { LoginSchema } from '@/schema/login'
-import { useLoginMutation } from '@/redux/api-queries/auth-api'
+import { useRegisterMutation } from '@/redux/api-queries/auth-api'
 import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
-import { setAccessToken, setRefreshToken } from '@/auth/cookies'
+import { setAccessToken } from '@/auth/cookies'
 import { useRouter } from 'next/navigation'
+import { RegisterSchema } from '@/schema/register'
 
 const RegisterForm = () => {
   // === router ===
   const router = useRouter()
 
   // === form inital data ===
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema as any),
     defaultValues: {
+      name: '',
       email: '',
       password: '',
     },
   })
 
   // === login api mutation hook ===
-  const [login, { isLoading }] = useLoginMutation()
+  const [login, { isLoading }] = useRegisterMutation()
 
-  const handleLogin = async (values: z.infer<typeof LoginSchema>) => {
+  const handleLogin = async (values: z.infer<typeof RegisterSchema>) => {
     try {
       const response: any = await login({
         payload: values,
       })
 
-      if (response?.data?.success) {
-        setAccessToken(response?.data?.data?.access_token)
-        setRefreshToken(response?.data?.data?.refresh_token)
+      if (response?.data?.status === 'success') {
+        setAccessToken(response?.data?.data?.token)
 
         // remove registerPayload from localStorage
         localStorage.removeItem('registerPayload')
@@ -69,6 +69,19 @@ const RegisterForm = () => {
       <form onSubmit={form.handleSubmit(handleLogin)} className="w-full grid gap-6">
         <h3 className="text-2xl font-medium">Register</h3>
 
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter your name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="email"
@@ -98,10 +111,10 @@ const RegisterForm = () => {
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
-              <Loader className="animate-spin" /> Login
+              <Loader className="animate-spin" /> Register
             </>
           ) : (
-            'Login'
+            'Register'
           )}
         </Button>
       </form>
