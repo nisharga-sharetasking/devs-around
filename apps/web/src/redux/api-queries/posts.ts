@@ -50,8 +50,8 @@ const postApi = apiSlice.injectEndpoints({
     
     // === Get current user's posts ===
     getPost: builder.query({
-      query: () => ({
-        url: `/posts/:id`,
+      query: ({id}) => ({
+        url: `/posts/${id}`,
         method: "GET",
       }),
       providesTags: ["POSTS"],

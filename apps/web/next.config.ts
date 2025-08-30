@@ -13,8 +13,7 @@ const nextConfig: NextConfig = {
         pathname: "/**"
       },
       {
-        hostname: "example.com",
-        pathname: "/**"
+        hostname: "picsum.photos",
       },
       {
         hostname: "media.com",

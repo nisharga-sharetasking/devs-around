@@ -48,10 +48,10 @@ const PostUpdateForm = () => {
 
   // Load initial data
   useEffect(() => {
-    if (data?.data) {
-      setFormData(data.data)
-      setOriginalData(data.data)
-      setCoverImage(data.data.coverImageUrl || '')
+    if (data?.data?.post) {
+      setFormData(data?.data?.post)
+      setOriginalData(data?.data?.post)
+      setCoverImage(data?.data?.post.coverImageUrl || '')
     }
   }, [data])
 
@@ -106,7 +106,7 @@ const PostUpdateForm = () => {
     }
 
     try {
-      await updatePost({ id: postId, payload }).unwrap()
+      await updatePost({ postId: postId, payload }).unwrap()
       toast.success('Post updated successfully!')
       router.replace('/dashboard/posts')
     } catch (error: any) {
@@ -186,7 +186,7 @@ const PostUpdateForm = () => {
             </Button>
           </div>
           <div className="flex flex-wrap gap-2">
-            {formData.tags.map((tag: string, index: number) => (
+            {formData?.tags?.map((tag: string, index: number) => (
               <Badge key={index} variant="secondary" className="flex items-center gap-1">
                 {tag}
                 <button
