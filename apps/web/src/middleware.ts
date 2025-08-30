@@ -8,7 +8,12 @@ export function middleware(request: NextRequest) {
   // const decodedUser = getDecodedUser(accessToken as string);
 
   // check if the route is auth route or not
-  const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
+  // const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
+  const isAuthRoute = AUTH_ROUTES.some((route) => {
+    // Allow all "/posts/*"
+    if (route === "/posts" && nextUrl.pathname.startsWith("/posts")) return true;
+    return nextUrl.pathname === route;
+  });
 
   // if the route is auth route (like: '/' or '/register' etc), and user is logged in then redirect to 'DEFAULT_LOGIN_REDIRECT' route. otherwise allow the user to access this route.
   if (isAuthRoute) {
@@ -17,6 +22,7 @@ export function middleware(request: NextRequest) {
     }
     return;
   }
+
 
   // if the user is not loggedin and route is not a auth route then redirect to '/' page
   if (!accessToken && !isAuthRoute) {

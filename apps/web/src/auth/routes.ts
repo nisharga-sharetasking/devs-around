@@ -1,5 +1,6 @@
-// all public routes goes here
-export const AUTH_ROUTES = ["/", "/posts/:id", "/login", "/register", "/verify-otp"];
+
+// routes.ts
+export const AUTH_ROUTES = ["/", "/login", "/register", "/verify-otp", "/posts"];
 
 // default redirect after login
 export const DEFAULT_LOGIN_REDIRECT = "/dashboard/overview";

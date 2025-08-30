@@ -4,7 +4,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import Container from '@/components/shared/container'
-import SearchBar from '@/components/posts/search-bar'
 import PostsGrid from '@/components/posts/posts-grid'
 import { Loader2 } from 'lucide-react'
 import { useGetAllPostsQuery } from '@/redux/api-queries/posts'
@@ -45,12 +44,10 @@ function useInfiniteScroll({ callback, hasMore, isLoading, threshold = 200 }: In
 const POSTS_PER_PAGE = 6
 
 const HomePage = () => {
-  const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(1)
   const [allPosts, setAllPosts] = useState<any[]>([])
 
   const { data, isFetching, isLoading } = useGetAllPostsQuery({
-    title: searchQuery,
     page: page.toString(),
     limit: POSTS_PER_PAGE.toString(),
   })
@@ -67,12 +64,6 @@ const HomePage = () => {
       }
     }
   }, [data, page])
-
-  // ✅ reset on new search
-  useEffect(() => {
-    setPage(1)
-    setAllPosts([])
-  }, [searchQuery])
 
   // ✅ load more handler
   const loadMore = useCallback(() => {
@@ -103,13 +94,6 @@ const HomePage = () => {
                 the world
               </p>
             </div>
-            <div className="mt-8">
-              <SearchBar
-                onSearch={setSearchQuery}
-                placeholder="Search posts by title..."
-                autoFocus
-              />
-            </div>
           </Container>
         </section>
 
@@ -119,10 +103,7 @@ const HomePage = () => {
 
             {/* 👇 Infinite scroll trigger */}
             {allPosts?.length > 0 && hasMore && (
-              <div 
-                ref={lastPostElementRef}
-                className="flex justify-center mt-8"
-              >
+              <div ref={lastPostElementRef} className="flex justify-center mt-8">
                 {isFetching && (
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Loader2 className="h-4 w-4 animate-spin" />

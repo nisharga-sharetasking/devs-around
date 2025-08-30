@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React from 'react'
 import { useParams } from 'next/navigation'
@@ -16,7 +16,7 @@ import { CalendarIcon, UserIcon, ArrowLeftIcon, ClockIcon } from 'lucide-react'
 const PostDetailsPage = () => {
   const params = useParams()
   const slug = params?.slug as string
-  
+
   const { data, isLoading, error } = useGetPostQuery({ id: slug })
   const post = data?.data?.post
 
@@ -32,7 +32,7 @@ const PostDetailsPage = () => {
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Post not found</h1>
             <p className="text-muted-foreground mb-8">
-              The post you're looking for doesn't exist or has been removed.
+              The post you are looking for does not exist or has been removed.
             </p>
             <Button asChild>
               <Link href="/">
@@ -53,62 +53,54 @@ const PostDetailsPage = () => {
   return (
     <div className="min-h-screen w-full bg-secondary">
       <Header />
-      
+
       <article className="w-full">
         <div className="bg-background border-b">
           <Container className="py-8">
-            <Button 
-              asChild 
-              variant="ghost" 
-              className="mb-6 -ml-2"
-            >
+            <Button asChild variant="ghost" className="mb-6 -ml-2">
               <Link href="/">
                 <ArrowLeftIcon className="mr-2 h-4 w-4" />
                 Back to Posts
               </Link>
             </Button>
-            
+
             <div className="max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                {post.title}
-              </h1>
-              
-              <p className="text-xl text-muted-foreground mb-6">
-                {post.excerpt}
-              </p>
-              
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">{post?.title}</h1>
+
+              <p className="text-xl text-muted-foreground mb-6">{post?.excerpt}</p>
+
               <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground mb-6">
                 <div className="flex items-center gap-2">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={post.authorId.avatar} alt={post.authorId.name} />
+                    <AvatarImage
+                      src={post?.authorId?.avatar || '/no_image.png'}
+                      alt={post?.authorId?.name}
+                    />
                     <AvatarFallback>
                       <UserIcon className="h-5 w-5" />
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium text-foreground">{post.authorId.name}</p>
-                    <p className="text-xs">{post.authorId.email}</p>
+                    <p className="font-medium text-foreground">{post?.authorId?.name}</p>
+                    <p className="text-xs">{post?.authorId?.email}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-1">
                   <CalendarIcon className="h-4 w-4" aria-hidden="true" />
                   <time dateTime={postDate}>{formattedDate}</time>
                 </div>
-                
+
                 <div className="flex items-center gap-1">
                   <ClockIcon className="h-4 w-4" aria-hidden="true" />
                   <span>{readingTime} min read</span>
                 </div>
               </div>
-              
-              {post.tags && post.tags.length > 0 && (
+
+              {post?.tags && post?.tags?.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag: string, index: number) => (
-                    <Badge 
-                      key={index} 
-                      variant="secondary"
-                    >
+                  {post?.tags.map((tag: string, index: number) => (
+                    <Badge key={index} variant="secondary">
                       {tag}
                     </Badge>
                   ))}
@@ -117,14 +109,14 @@ const PostDetailsPage = () => {
             </div>
           </Container>
         </div>
-        
+
         <Container className="py-12">
           <div className="max-w-4xl mx-auto">
-            {post.coverImageUrl && (
+            {post?.coverImageUrl && (
               <div className="relative w-full h-96 md:h-[500px] mb-12 rounded-lg overflow-hidden">
                 <Image
-                  src={post.coverImageUrl}
-                  alt={`Cover image for ${post.title}`}
+                  src={post?.coverImageUrl}
+                  alt={`Cover image for ${post?.title}`}
                   fill
                   className="object-cover"
                   priority
@@ -132,8 +124,8 @@ const PostDetailsPage = () => {
                 />
               </div>
             )}
-            
-            <div 
+
+            <div
               className="prose prose-lg dark:prose-invert max-w-none"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
